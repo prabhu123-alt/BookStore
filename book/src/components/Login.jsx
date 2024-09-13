@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 function Login() {
     const {
         register,
@@ -9,12 +10,41 @@ function Login() {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => console.log(data);
+
+    const onSubmit = async (data) => {
+        const { email, password } = data;
+
+        const getUser = {
+            email,
+            password
+        };
+
+        try {
+            const response = await axios.post("http://localhost:4002/user/login", getUser);
+            if (response.status === 200) {
+                toast.success("Login successful 😀😎");
+                const userData = response.data;
+                localStorage.setItem('user', JSON.stringify(userData));
+                closeModal();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+
+            } else {
+                toast.error("Login failed");
+            }
+
+        } catch (error) {
+            console.error("Error during login:", error);
+            toast.error('Error: ' + (error.response?.data?.message || error.message));
+        }
+    };
+
 
     const closeModal = () => {
         const modal = document.getElementById('my_modal_3');
         if (modal) {
-            modal.close();  
+            modal.close();
         }
     };
 
@@ -46,7 +76,7 @@ function Login() {
                             type="password"
                             placeholder="Enter your password"
                             className="input flex input-bordered w-full max-w-xs"
-                            {...register("password", { required: true })}   
+                            {...register("password", { required: true })}
 
                         />
                         {errors.password && <p className="text-red-500 flex">Password is required</p>}

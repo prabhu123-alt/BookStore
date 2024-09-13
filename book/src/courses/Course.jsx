@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import bookData from '../../public/book.json';
+import axios from 'axios';
 
 function Course() {
-    const [books, setBooks] = useState([]);
+    const [card, setcards] = useState([]);
 
-    useEffect(() => {
-        setBooks(bookData);
+    useEffect( async () => {
+        const getData = async () => {
+            try {
+                const response = await axios.get('http://localhost:4002/card'); 
+                setcards(response.data);
+            } catch (error) {
+                console.log('Error fetching data:', error); 
+            }
+        };
+        getData();
     }, []);
 
-    const filteredBooks = books.filter((item) => item.category !== 'free');
+    const filteredBooks = card.filter((item) => item.category !== 'free');
+    console.log(filteredBooks);
 
     return (
         <>
@@ -22,19 +31,20 @@ function Course() {
                             {filteredBooks.map((book, index) => (
                                 <div key={index} className="card bg-base-100 w-full md:w-96 shadow-xl">
                                     <figure>
-                                        <img
-                                            src={book.coverImage}
-                                            alt={book.title || "Book cover"}
+                                        <img className="w-full h-60"
+                                            src={book.coverImage ||'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                                            alt={book.title }
+                                            
                                         />
                                     </figure>
                                     <div className="card-body">
                                         <h2 className="card-title">
-                                            {book.title || "Book Title"}
+                                            {book.title || "The God"}
                                             <div className="badge badge-secondary">NEW</div>
                                         </h2>
-                                        <p>{book.description || "Book description"}</p>
+                                        <p>{book.description||"This book is best for envoriment"}</p>
                                         <div className="card-actions justify-end">
-                                            <div className="badge badge-outline">{book.category || "Category"}</div>
+                                            <div className="badge badge-outline">{book.category ||'The Nature'}</div>
                                            
                                         </div>
                                     </div>

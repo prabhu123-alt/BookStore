@@ -26,7 +26,7 @@ function Middle() {
                         </svg>
                         <input type="text" className="grow" placeholder="Email" />
                     </label>
-                    <button className="btn btn-secondary mt-3">Login</button>
+                    <button className="btn btn-secondary mt-3">Get Started</button>
                 </div>
                 <div className='w-full md:w-1/2 flex items-center justify-center'>
                     <img

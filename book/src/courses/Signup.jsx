@@ -1,7 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Login from '../components/login';
+import { Link, replace, useLocation, useNavigate} from 'react-router-dom';
+import Login from '../components/Login';
 import { useForm } from "react-hook-form";
+import axios from 'axios'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 function Signup() {
     const {
@@ -9,10 +12,43 @@ function Signup() {
         handleSubmit,
         formState: { errors },
     } = useForm();
+     const location=useLocation();
+     const navigate=useNavigate();
+     const from=location.state?.from?.pathname ||  "/";
 
-    const onSubmit = (data) => console.log(data);
 
-   
+    const onSubmit = async (data) => {
+        const { fullname, email, password } = data;
+
+        const getUser = {
+            fullname,
+            email,
+            password
+        };
+
+        try {
+            const response = await axios.post("http://localhost:4002/user/signup", getUser);
+            if (response.status === 201) {
+                toast.success("Signup successful");
+                const userData = response.data; 
+                localStorage.setItem('user', JSON.stringify(userData)); 
+               navigate(from,{replace:true});
+                
+            } else {
+                toast.error("Signup failed");
+            }
+
+        } catch (error) {
+            console.error("Error during signup:", error);
+            toast.error('Error: ' + (error.response?.data?.message || error.message));
+        }
+    };
+
+
+
+
+
+
 
     return (
         <>
@@ -23,7 +59,7 @@ function Signup() {
                             <Link to='/'
                                 type="button"
                                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                              
+
                             >
                                 ✕
                             </Link>
@@ -34,9 +70,9 @@ function Signup() {
                                 type="text"
                                 placeholder="Enter your name"
                                 className="input input-bordered w-full max-w-xs"
-                                {...register("name", { required: true })}
+                                {...register("fullname", { required: true })}
                             />
-                            {errors.name && <p className="text-red-500 flex">Name is required</p>}
+                            {errors.fullname && <p className="text-red-500 flex">Name is required</p>}
 
                             <p className="py-4">Email</p>
                             <input

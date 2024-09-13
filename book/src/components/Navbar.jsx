@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Login from './login';
+import Logout from './Logout';
+import { useAuth } from '../context/authprovider';
+
 
 function Navbar() {
+    const [authUser, setAuthUser] = useAuth();
 
-   
 
     const [theme, setTheme] = useState('light');
 
@@ -28,13 +31,13 @@ function Navbar() {
             </li>
 
             <li className=' font-bold '>
-                <a>About</a>
+                <a href='/About'>Author</a>
             </li>
         </>
     )
     return (
         <>
-            <div className='fixed top-0 left-0 right-0 z-30 bg-base-100 shadow-md  dark:bg-white-900 dark:text-black'>
+            <div className='fixed top-0 left-0 right-0 z-30 bg-base-100 shadow-md  dark:text-black'>
                 <div className='max-w-screen-2xl container  mx-auto md:px-20'>
                     <div className="navbar bg-base-100">
                         <div className="navbar-start">
@@ -114,11 +117,17 @@ function Navbar() {
                                     </svg>
                                 </label>
                             </div>
-                            <div className="navbar-start">
-                                <a className="btn bg-blue-900 text-white hover:bg-red-400 py-3 px-4" onClick={()=>document.getElementById('my_modal_3').showModal()}>Login</a>
-                                <Login />
 
-                            </div>
+
+                            {
+                                authUser ? <Logout /> :
+
+                                    <div className="navbar-start">
+                                        <a className="btn bg-blue-900 text-white hover:bg-red-400 py-3 px-4" onClick={() => document.getElementById('my_modal_3').showModal()}>Login</a>
+                                        <Login />
+
+                                    </div>
+                            }
                         </div>
                     </div>
                 </div>

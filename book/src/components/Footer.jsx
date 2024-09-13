@@ -6,10 +6,10 @@ function Footer() {
             <div className='mt-9 '>
                 <footer className="footer footer-center  dark:bg-slate-700 dark:text-white text-base-content rounded p-10">
                     <nav className="grid grid-flow-col gap-4">
-                        <a className="link link-hover">About us</a>
-                        <a className="link link-hover">Contact</a>
-                        <a className="link link-hover">Jobs</a>
-                        <a className="link link-hover">Press kit</a>
+                        <a href='/About' className="link link-hover">Author</a>
+                        <a href='/Contact' className="link link-hover">Contact</a>
+                        <a href='/' className="link link-hover">Home</a>
+                        <a  href='Course' className="link link-hover">Course</a>
                     </nav>
                     <nav>
                         <div className="grid grid-flow-col gap-4">

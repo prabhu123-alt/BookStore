@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import booksData from '../../public/book.json'; // Adjust path if needed
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Cards from './Cards'; // Import Cards component
+import Cards from './Cards';
+import axios from 'axios';
 
-function Card() { // Renamed from Card to Card
-    const [books, setBooks] = useState([]);
+function Card() { 
+
+    const [card, setCard] = useState([]);
+
     useEffect(() => {
-        setBooks(booksData);
+        const getData = async () => {
+            try {
+                const response = await axios.get('http://localhost:4002/card');
+                setCard(response.data);
+            } catch (error) {
+                console.log('Error fetching data:', error); 
+            }
+        };
+
+     
+        getData();
     }, []);
 
-    // Filter books categorized as 'free'
-    const freeBooks = books.filter(book => book.category === 'free');
-
-    // Slider settings
+    const freeBooks = card.filter(book => book.category === 'free');
+    console.log(freeBooks); 
     const settings = {
         dots: true,
         infinite: false,
@@ -51,20 +61,16 @@ function Card() { // Renamed from Card to Card
     };
 
     return (
-        <>
-            <div>
-                <div className='max-w-screen-2xl container mx-auto md:px-20'>
-                    <Slider {...settings}>
-                        {freeBooks.map(book => (
-                            <Cards key={book.id} book={book} />
-                        ))}
-                    </Slider>
-                </div>
+        <div>
+            <div className='max-w-screen-2xl container mx-auto md:px-20'>
+                <Slider {...settings}>
+                    {freeBooks.map(book => (
+                        <Cards key={book.id} book={book} />
+                    ))}
+                </Slider>
             </div>
-        </>
-
-
+        </div>
     );
 }
 
-export default Card; // Export the renamed component
+export default Card; 
